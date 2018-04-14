@@ -8,10 +8,9 @@ O_DIR =	.tmp/obj
 O_DIRS = $(C_DIRS:$(C_DIR)%=$(O_DIR)%)
 O_FILES = $(C_FILES:$(C_DIR)%.c=$(O_DIR)%.o)
 
-#FLAGS = -Wall -Wextra -Werror
-FLAGS = 
+FLAGS = -Wall -Wextra -Werror -fsanitize=address
 INCLUDES = -I ./includes -I ./libft/includes -I /Users/ngrasset/.brew/include/  -I /Users/ngrasset/.brew/include/GLFW
-LIB = -L /usr/local/lib -framework OpenGL -framework AppKit -L ./libft -l ft -L /Users/ngrasset/.brew/lib -l GLEW -l glfw
+LIB = -L /usr/local/lib -framework OpenGL -framework AppKit -L ./libft -l ft -L /Users/ngrasset/.brew/lib -l glfw
 
 CC = gcc
 

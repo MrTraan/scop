@@ -6,39 +6,108 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/27 16:19:46 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/08/27 20:17:15 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/14 18:10:11 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
 #include <stdio.h>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <scop.h>
 
-
-int		main(int argc, char **argv)
+static void			framebuffer_size_callback(GLFWwindow* window, int width,
+		int height)
 {
-	t_obj_file *obj_file;
+	(void)window;
+	glViewport(0, 0, width, height);
+}
 
-	if (argc == 1)
-		return (0);
-	if (!(obj_file = load_obj_file(argv[1])))
+#include <stdlib.h>
+
+void check_gl_error(void) {
+	GLenum err = glGetError();
+	if (err != GL_NO_ERROR)
 	{
-		printf("Was there an error?\n");
-		return 1;
+
+		while(err!=GL_NO_ERROR) {
+			switch(err) {
+				case GL_INVALID_OPERATION:      printf("INVALID_OPERATION");      break;
+				case GL_INVALID_ENUM:           printf("INVALID_ENUM");           break;
+				case GL_INVALID_VALUE:          printf("INVALID_VALUE");          break;
+				case GL_OUT_OF_MEMORY:          printf("OUT_OF_MEMORY");          break;
+				case GL_INVALID_FRAMEBUFFER_OPERATION:  printf("INVALID_FRAMEBUFFER_OPERATION");  break;
+			}
+			err=glGetError();
+		}
+		exit (1);
 	}
+}
 
-	t_vector3 *arr;
-	t_list *ptr;
+static GLFWwindow	*create_window(void)
+{
+	GLFWwindow		*window;
 
-	size_t len = ft_lstlen(obj_file->vertices);
-	arr = malloc(sizeof(t_vector3) * len);
-
-	ptr = obj_file->vertices;
-	for (size_t i = 0; i < len; i++)
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Scop",
+			NULL, NULL);
+	if (window)
 	{
-		memcpy(arr + i, ptr->content, sizeof(t_vector3));
-		ptr = ptr->next;
+		glfwMakeContextCurrent(window);
+		glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
 	}
+	return (window);
+}
 
+static int			setup_opengl(void)
+{
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		fprintf(stderr, "Failed to initialize glad\n");
+		return (1);
+	}
+	glEnable(GL_DEPTH_TEST);
+	return (0);
+}
 
+int					main(int argc, char **argv)
+{
+	GLFWwindow	*window;
+	t_model		*model;
+	t_shader	shader; 
+	t_view		view;
+
+	if (argc < 2)
+	{
+		sc_store_error(SC_ERRNO_NO_ARGUMENT, "");
+		return (sc_perror());
+	}
+	if ((window = create_window()) == NULL || setup_opengl() != 0)
+		return (1);
+	if ((model = parse_model_file(argv[1])) == NULL)
+		return (sc_perror());
+	if ((shader = compile_shader("./shaders/shader.vs", "./shaders/shader.fs")) == SC_SHADER_FAILED)
+		return (sc_perror());
+	use_shader(shader);
+	view_init(&view, shader);
+	create_model_vao(model);
+	while (!glfwWindowShouldClose(window))
+	{
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			glfwSetWindowShouldClose(window, GL_TRUE);
+		view_update(&view);
+		use_shader(shader);
+		view_bind(&view);
+		draw_model(model);
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+	glfwTerminate();
 	return (0);
 }
