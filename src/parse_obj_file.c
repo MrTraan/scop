@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/13 19:17:52 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/15 15:10:48 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 18:03:35 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,5 +124,6 @@ t_model			*parse_model_file(char *path)
 			parse_indices(model, file_data) != 0)
 		return (NULL);
 	create_model_uv(model);
+	free_string_tab(file_data);
 	return (model);
 }

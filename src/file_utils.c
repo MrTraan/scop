@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/13 19:18:44 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/15 17:01:34 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 18:02:57 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,17 @@ char	*read_ol_file(char *path)
 	buffer[size] = '\0';
 	fclose(fh);
 	return (buffer);
+}
+
+void	free_string_tab(char **tab)
+{
+	int		i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
 }

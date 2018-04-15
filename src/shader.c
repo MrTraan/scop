@@ -6,13 +6,14 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 11:11:51 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/15 17:54:45 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 18:04:10 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <scop.h>
+#include <stdlib.h>
 
 t_shader	load_shader(char *path, GLenum type)
 {
@@ -26,6 +27,7 @@ t_shader	load_shader(char *path, GLenum type)
 	glCompileShader(id);
 	if (check_shader_compilation(id) != 0)
 		return (SC_SHADER_FAILED);
+	free(file);
 	return (id);
 }
 

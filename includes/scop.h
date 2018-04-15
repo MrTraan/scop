@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/27 16:28:22 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/15 17:53:39 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 18:03:23 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef struct			s_app
 char					**read_file(char *path);
 char					*read_ol_file(char *path);
 t_model					*parse_model_file(char *path);
+void					free_string_tab(char **tab);
 
 t_shader				compile_shader(char *vertex_path, char *fragment_path);
 void					use_shader(t_shader s);
