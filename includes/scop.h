@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/27 16:28:22 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/15 18:03:23 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 18:12:26 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define SC_ERRNO_SHADER_LINK	7
 # define SC_ERRNO_WINDOW		8
 # define SC_ERRNO_GLAD			9
+# define SC_ERRNO_OBJ_FILE		10
 
 # define SC_SHADER_FAILED 		0
 # define SC_TEXTURE_FAILED		0

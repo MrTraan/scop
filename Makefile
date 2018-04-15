@@ -1,18 +1,30 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2018/04/15 18:16:02 by ngrasset          #+#    #+#              #
+#    Updated: 2018/04/15 18:17:36 by ngrasset         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = scop
 
 C_DIR = src
-C_DIRS = $(shell find $(C_DIR) -type d -follow -print | grep -v '/tests_')
-C_FILES = $(shell find $(C_DIRS) -type f -follow -print | grep "\.c" | grep -v '.swp')
+C_FILES = src/errors.c src/file_utils.c src/glad.c src/main.c src/mat4.c \
+	src/mat4_2.c src/model.c src/parse_obj_file.c src/shader.c src/shader_setting.c \
+	src/texture.c src/view.c
 
 O_DIR =	.tmp/obj
-O_DIRS = $(C_DIRS:$(C_DIR)%=$(O_DIR)%)
 O_FILES = $(C_FILES:$(C_DIR)%.c=$(O_DIR)%.o)
 
-FLAGS = -Wall -Wextra -Werror -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -O3
 INCLUDES = -I ./includes -I./libs -I ./libft/includes -I /Users/ngrasset/.brew/include/  -I /Users/ngrasset/.brew/include/GLFW
 LIB = -L /usr/local/lib -framework OpenGL -framework AppKit -L ./libft -l ft -L /Users/ngrasset/.brew/lib -l glfw
 
-CC = gcc
+CC = clang
 
 all: $(NAME)
 
@@ -21,7 +33,7 @@ $(NAME): $(O_FILES)
 	$(CC) $(FLAGS) $^ $(INCLUDES) $(LIB) -o $@
 
 $(O_DIR)%.o: $(C_DIR)%.c
-	@mkdir -p $(O_DIRS) $(O_DIR)
+	@mkdir -p $(O_DIR)
 	$(CC) $(FLAGS) $(INCLUDES) -o $@ -c $<
 
 clean:

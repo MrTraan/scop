@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/13 19:17:52 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/15 18:03:35 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 18:13:18 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,11 @@ t_model			*parse_model_file(char *path)
 		return (NULL);
 	model->vertices_count = count_vertices(file_data);
 	model->indices_count = count_indices(file_data);
+	if (model->vertices_count == 0 || model->indices_count == 0)
+	{
+		sc_store_error(SC_ERRNO_OBJ_FILE, "");
+		return (NULL);
+	}
 	model->vertices = malloc(sizeof(t_vertex) * model->vertices_count);
 	model->indices = malloc(sizeof(t_uint) * model->indices_count);
 	if (parse_vertices(model, file_data) != 0 ||

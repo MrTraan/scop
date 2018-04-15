@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/14 13:20:14 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/15 17:17:44 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 18:12:51 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int				sc_store_error(int errno, char *msg)
 		sprintf(g_sc_error_buffer, "Could not create glfw window.%s\n", msg);
 	if (errno == SC_ERRNO_GLAD)
 		sprintf(g_sc_error_buffer, "Failed to initialize glad.%s\n", msg);
+	if (errno == SC_ERRNO_OBJ_FILE)
+		sprintf(g_sc_error_buffer, "Invalid .obj file%s\n", msg);
 	g_sc_errno = errno;
 	return (errno);
 }
