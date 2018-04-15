@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 11:11:51 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/14 18:03:21 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 17:54:45 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_shader	load_shader(char *path, GLenum type)
 
 t_shader	compile_shader(char *vertex_path, char *fragment_path)
 {
-	t_shader 	program;
+	t_shader	program;
 	t_shader	shaders[2];
 
 	shaders[0] = load_shader(vertex_path, GL_VERTEX_SHADER);
@@ -46,10 +46,11 @@ t_shader	compile_shader(char *vertex_path, char *fragment_path)
 	glDeleteShader(shaders[1]);
 	if ((check_shader_linking(program)) != 0)
 		return (SC_SHADER_FAILED);
+	use_shader(program);
 	return (program);
 }
 
-void 		use_shader(t_shader s)
+void		use_shader(t_shader s)
 {
 	glUseProgram(s);
 }

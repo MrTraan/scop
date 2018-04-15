@@ -9,7 +9,6 @@ uniform int textureMode;
 
 void main()
 { 
-	/*
 	if (textureMode != 0)
 	{
 		FragColor = texture(ourTexture, texCoord);
@@ -18,6 +17,4 @@ void main()
 	{
 		FragColor = vec4(myColor, 1.0);
 	}
-	*/
-	FragColor = vec4(myColor, 1.0);
 }

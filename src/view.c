@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/14 16:12:59 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/15 15:42:28 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 17:39:19 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void		view_init(t_view *view, t_shader shader)
 	view->view_loc = glGetUniformLocation(shader, "view");
 	view->projection_loc = glGetUniformLocation(shader, "projection");
 	mat4x4_identity(view->projection);
-	mat4x4_perspective(view->projection, TO_RADIAN(45.0f),
+	mat4x4_perspective(view->projection,
 			(float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 	mat4x4_identity(view->view);
 	mat4x4_translate(view->view, (t_v3){0.f, 0.f, -3.f});

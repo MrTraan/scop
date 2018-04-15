@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 16:25:36 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/15 16:36:20 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 17:55:35 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ t_texture		load_texture(char *path, GLenum format)
 	t_texture			t;
 	t_texture_settings	set;
 
-	set.data = stbi_load(path, &(set.width), &(set.height), &(set.nr_channels), 0);
+	set.data = stbi_load(path, &(set.width), &(set.height),
+			&(set.nr_channels), 0);
 	if (!set.data)
 	{
 		sc_store_error(SC_ERRNO_OPEN_FILE, path);

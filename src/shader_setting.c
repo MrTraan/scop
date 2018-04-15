@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 12:35:39 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/14 18:01:49 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 17:55:08 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	shader_set_float(t_shader s, char *name, float value)
 
 int		check_shader_compilation(t_shader shader)
 {
-	int 	success;
+	int		success;
 	char	info_log[512];
 
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -40,7 +40,7 @@ int		check_shader_compilation(t_shader shader)
 
 int		check_shader_linking(t_shader shader)
 {
-	int 	success;
+	int		success;
 	char	info_log[512];
 
 	glGetProgramiv(shader, GL_LINK_STATUS, &success);

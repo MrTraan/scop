@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/27 16:19:46 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/15 16:35:02 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 17:53:24 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,44 +15,11 @@
 #include <GLFW/glfw3.h>
 #include <scop.h>
 
-void				glfw_key_callback(GLFWwindow *window, int key,
-		int scancode, int action, int mods)
-{
-	(void)mods;
-	(void)scancode;
-	(void)window;
-	if (key == GLFW_KEY_T && action == GLFW_RELEASE)
-	{
-		printf("released key t\n");
-	}
-}
-
-static void			framebuffer_size_callback(GLFWwindow* window, int width,
+static void			framebuffer_size_callback(GLFWwindow *window, int width,
 		int height)
 {
 	(void)window;
 	glViewport(0, 0, width, height);
-}
-
-#include <stdlib.h>
-
-void check_gl_error(void) {
-	GLenum err = glGetError();
-	if (err != GL_NO_ERROR)
-	{
-
-		while(err!=GL_NO_ERROR) {
-			switch(err) {
-				case GL_INVALID_OPERATION:      printf("INVALID_OPERATION");      break;
-				case GL_INVALID_ENUM:           printf("INVALID_ENUM");           break;
-				case GL_INVALID_VALUE:          printf("INVALID_VALUE");          break;
-				case GL_OUT_OF_MEMORY:          printf("OUT_OF_MEMORY");          break;
-				case GL_INVALID_FRAMEBUFFER_OPERATION:  printf("INVALID_FRAMEBUFFER_OPERATION");  break;
-			}
-			err=glGetError();
-		}
-		exit (1);
-	}
 }
 
 static GLFWwindow	*create_window(void)
@@ -66,63 +33,69 @@ static GLFWwindow	*create_window(void)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Scop",
 			NULL, NULL);
-	if (window)
+	if (!window)
 	{
-		glfwMakeContextCurrent(window);
-		glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-		glfwSetKeyCallback(window, glfw_key_callback);
+		sc_store_error(SC_ERRNO_WINDOW, "");
+		return (NULL);
 	}
+	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	return (window);
 }
 
 static int			setup_opengl(void)
 {
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		fprintf(stderr, "Failed to initialize glad\n");
-		return (1);
-	}
+		return (sc_store_error(SC_ERRNO_GLAD, ""));
 	glEnable(GL_DEPTH_TEST);
 	return (0);
 }
 
+static void			main_loop(t_app *app)
+{
+	static int		texture_mode = 0;
+
+	if (texture_mode && glfwGetKey(app->window, GLFW_KEY_T) == GLFW_RELEASE)
+		texture_mode = !texture_mode;
+	if (!texture_mode && glfwGetKey(app->window, GLFW_KEY_T) == GLFW_PRESS)
+		texture_mode = !texture_mode;
+	glUniform1i(glGetUniformLocation(app->shader, "textureMode"), texture_mode);
+	if (glfwGetKey(app->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(app->window, GL_TRUE);
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	view_update(&(app->view));
+	use_shader(app->shader);
+	view_bind(&(app->view));
+	glBindVertexArray(app->model->vao);
+	glDrawElements(GL_TRIANGLES, app->model->indices_count, GL_UNSIGNED_INT, 0);
+	glfwSwapBuffers(app->window);
+	glfwPollEvents();
+}
+
 int					main(int argc, char **argv)
 {
-	GLFWwindow	*window;
-	t_model		*model;
-	t_shader	shader; 
-	t_view		view;
-	t_texture	texture;
+	t_app		app;
 
 	if (argc < 2)
 	{
 		sc_store_error(SC_ERRNO_NO_ARGUMENT, "");
 		return (sc_perror());
 	}
-	if ((window = create_window()) == NULL || setup_opengl() != 0)
-		return (1);
-	if ((model = parse_model_file(argv[1])) == NULL)
+	if ((app.window = create_window()) == NULL
+		|| setup_opengl() != 0
+		|| (app.model = parse_model_file(argv[1])) == NULL
+		|| (app.texture = load_texture("./assets/kitten.jpg", GL_RGB)) ==
+		SC_TEXTURE_FAILED
+		|| (app.shader = compile_shader("./shaders/shader.vs",
+		"./shaders/shader.fs")) == SC_SHADER_FAILED)
 		return (sc_perror());
-	if ((texture = load_texture("./resources/kitten.jpg", GL_RGB)) == SC_TEXTURE_FAILED)
-		return (sc_perror());
-	if ((shader = compile_shader("./shaders/shader.vs", "./shaders/shader.fs")) == SC_SHADER_FAILED)
-		return (sc_perror());
-	use_shader(shader);
-	view_init(&view, shader);
-	create_model_vao(model);
-	use_texture(texture);
-	while (!glfwWindowShouldClose(window))
-	{
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		view_update(&view);
-		use_shader(shader);
-		view_bind(&view);
-		draw_model(model);
-		glfwSwapBuffers(window);
-		glfwPollEvents();
-	}
+	view_init(&(app.view), app.shader);
+	create_model_vao(app.model);
+	use_texture(app.texture);
+	while (!glfwWindowShouldClose(app.window))
+		main_loop(&app);
 	glfwTerminate();
-	delete_model(model);
+	delete_model(app.model);
 	return (0);
 }
