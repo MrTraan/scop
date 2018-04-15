@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/14 16:12:59 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/14 18:03:59 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 15:42:28 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,13 @@ void		view_init(t_view *view, t_shader shader)
 	mat4x4_identity(view->view);
 	mat4x4_translate(view->view, (t_v3){0.f, 0.f, -3.f});
 	mat4x4_identity(view->transform);
-	mat4x4_scale(view->transform, view->transform, 0.3f);
+	mat4x4_scale(view->transform, view->transform, 1.f / 3.f);
 }
 
 void		view_update(t_view *view)
 {
-	mat4x4_rotate_y(view->transform, view->transform, TO_RADIAN(1.0f));
+	mat4x4_rotate_y(view->transform, view->transform,
+			TO_RADIAN(1.f));
 }
 
 void		view_bind(t_view *view)

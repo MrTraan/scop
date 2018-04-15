@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/27 16:19:46 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/14 18:10:11 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 16:35:02 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,18 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <scop.h>
+
+void				glfw_key_callback(GLFWwindow *window, int key,
+		int scancode, int action, int mods)
+{
+	(void)mods;
+	(void)scancode;
+	(void)window;
+	if (key == GLFW_KEY_T && action == GLFW_RELEASE)
+	{
+		printf("released key t\n");
+	}
+}
 
 static void			framebuffer_size_callback(GLFWwindow* window, int width,
 		int height)
@@ -58,7 +70,7 @@ static GLFWwindow	*create_window(void)
 	{
 		glfwMakeContextCurrent(window);
 		glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
+		glfwSetKeyCallback(window, glfw_key_callback);
 	}
 	return (window);
 }
@@ -80,6 +92,7 @@ int					main(int argc, char **argv)
 	t_model		*model;
 	t_shader	shader; 
 	t_view		view;
+	t_texture	texture;
 
 	if (argc < 2)
 	{
@@ -90,17 +103,18 @@ int					main(int argc, char **argv)
 		return (1);
 	if ((model = parse_model_file(argv[1])) == NULL)
 		return (sc_perror());
+	if ((texture = load_texture("./resources/kitten.jpg", GL_RGB)) == SC_TEXTURE_FAILED)
+		return (sc_perror());
 	if ((shader = compile_shader("./shaders/shader.vs", "./shaders/shader.fs")) == SC_SHADER_FAILED)
 		return (sc_perror());
 	use_shader(shader);
 	view_init(&view, shader);
 	create_model_vao(model);
+	use_texture(texture);
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-			glfwSetWindowShouldClose(window, GL_TRUE);
 		view_update(&view);
 		use_shader(shader);
 		view_bind(&view);
@@ -109,5 +123,6 @@ int					main(int argc, char **argv)
 		glfwPollEvents();
 	}
 	glfwTerminate();
+	delete_model(model);
 	return (0);
 }

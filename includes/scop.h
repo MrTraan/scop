@@ -6,14 +6,17 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/27 16:28:22 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/14 17:57:16 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/15 16:37:46 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SCOP_H
 # define SCOP_H
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <ft_math.h>
+#include <stb_image.h>
 
 # define SCREEN_WIDTH 800
 # define SCREEN_HEIGHT 600
@@ -26,9 +29,11 @@
 # define SC_ERRNO_SHADER_LINK	7
 
 # define SC_SHADER_FAILED 		0
+# define SC_TEXTURE_FAILED		0
 
 typedef unsigned int	t_uint;
 typedef unsigned int	t_shader;
+typedef unsigned int	t_texture;
 
 typedef struct			s_vertex
 {
@@ -46,6 +51,9 @@ typedef struct			s_model
 	unsigned int		vao;
 	unsigned int		vbo;
 	unsigned int		ebo;
+	t_v2				bounds_x;
+	t_v2				bounds_y;
+	t_v2				bounds_z;
 }						t_model;
 
 typedef struct			s_view
@@ -57,6 +65,14 @@ typedef struct			s_view
 	t_uint				view_loc;
 	t_uint				transform_loc;
 }						t_view;
+
+typedef struct			s_texture_settings
+{
+	int					width;
+	int					height;
+	int					nr_channels;
+	stbi_uc				*data;
+}						t_texture_settings;
 
 char					**read_file(char *path);
 char					*read_ol_file(char *path);
@@ -79,6 +95,11 @@ void					view_update(t_view *view);
 
 void					draw_model(t_model *model);
 void					create_model_vao(t_model *model);
+void					create_model_uv(t_model *model);
+void					delete_model(t_model *model);
+
+t_texture				load_texture(char *path, GLenum format);
+void					use_texture(t_texture t);
 
 
 void check_gl_error(void);
