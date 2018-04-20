@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/27 16:19:46 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/20 18:22:32 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/20 18:41:02 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,40 +15,18 @@
 #include <GLFW/glfw3.h>
 #include <scop.h>
 
-static void			framebuffer_size_callback(GLFWwindow *window, int width,
-		int height)
+static void			read_keyboard(t_app *app)
 {
-	(void)window;
-	glViewport(0, 0, width, height);
-}
-
-static GLFWwindow	*create_window(void)
-{
-	GLFWwindow		*window;
-
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Scop",
-			NULL, NULL);
-	if (!window)
-	{
-		sc_store_error(SC_ERRNO_WINDOW, "");
-		return (NULL);
-	}
-	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	return (window);
-}
-
-static int			setup_opengl(void)
-{
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-		return (sc_store_error(SC_ERRNO_GLAD, ""));
-	glEnable(GL_DEPTH_TEST);
-	return (0);
+	if (glfwGetKey(app->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(app->window, GL_TRUE);
+	if (glfwGetKey(app->window, GLFW_KEY_UP) == GLFW_PRESS)
+		app->view.model_offset[1] += 0.01f;
+	if (glfwGetKey(app->window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		app->view.model_offset[1] -= 0.01f;
+	if (glfwGetKey(app->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		app->view.model_offset[0] += 0.01f;
+	if (glfwGetKey(app->window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		app->view.model_offset[0] -= 0.01f;
 }
 
 static void			main_loop(t_app *app)
@@ -60,10 +38,9 @@ static void			main_loop(t_app *app)
 	if (!texture_mode && glfwGetKey(app->window, GLFW_KEY_T) == GLFW_PRESS)
 		texture_mode = !texture_mode;
 	glUniform1i(glGetUniformLocation(app->shader, "textureMode"), texture_mode);
-	if (glfwGetKey(app->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(app->window, GL_TRUE);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	read_keyboard(app);
 	view_update(&(app->view));
 	use_shader(app->shader);
 	view_bind(&(app->view));

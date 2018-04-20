@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/27 16:28:22 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/20 18:10:39 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/20 18:41:35 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <glad/glad.h>
 # include <GLFW/glfw3.h>
 # include <ft_math.h>
-# include <stb_image.h>
 
 # define SCREEN_WIDTH			800
 # define SCREEN_HEIGHT			600
@@ -67,6 +66,7 @@ typedef struct			s_view
 	t_uint				projection_loc;
 	t_uint				view_loc;
 	t_uint				transform_loc;
+	t_v3				model_offset;
 }						t_view;
 
 typedef struct			s_texture_settings
@@ -84,6 +84,9 @@ typedef struct			s_app
 	t_view				view;
 	t_texture			texture;
 }						t_app;
+
+int						setup_opengl(void);
+GLFWwindow				*create_window(void);
 
 char					**read_file(char *path);
 char					*read_ol_file(char *path);

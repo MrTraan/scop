@@ -6,7 +6,7 @@
 #    By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/15 18:16:02 by ngrasset          #+#    #+#              #
-#    Updated: 2018/04/15 18:17:36 by ngrasset         ###   ########.fr        #
+#    Updated: 2018/04/20 18:41:46 by ngrasset         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = scop
 C_DIR = src
 C_FILES = src/errors.c src/file_utils.c src/glad.c src/main.c src/mat4.c \
 	src/mat4_2.c src/model.c src/parse_obj_file.c src/shader.c src/shader_setting.c \
-	src/texture.c src/view.c
+	src/texture.c src/view.c src/init.c
 
 O_DIR =	.tmp/obj
 O_FILES = $(C_FILES:$(C_DIR)%.c=$(O_DIR)%.o)

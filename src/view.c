@@ -6,13 +6,14 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/14 16:12:59 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/15 17:39:19 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/20 18:39:08 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <scop.h>
+#include <string.h>
 
 void		view_init(t_view *view, t_shader shader)
 {
@@ -26,12 +27,16 @@ void		view_init(t_view *view, t_shader shader)
 	mat4x4_translate(view->view, (t_v3){0.f, 0.f, -3.f});
 	mat4x4_identity(view->transform);
 	mat4x4_scale(view->transform, view->transform, 1.f / 3.f);
+	memset(view->model_offset, sizeof(t_v3), 0);
 }
 
 void		view_update(t_view *view)
 {
+	mat4x4_identity(view->transform);
+	mat4x4_scale(view->transform, view->transform, 1.f / 3.f);
 	mat4x4_rotate_y(view->transform, view->transform,
-			TO_RADIAN(1.f));
+			TO_RADIAN(glfwGetTime() * 50));
+	mat4x4_translate(view->transform, view->model_offset);
 }
 
 void		view_bind(t_view *view)

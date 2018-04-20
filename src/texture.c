@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 16:25:36 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/20 18:22:49 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/20 18:42:45 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int			load_ppm(char *path, t_texture_settings *img)
+int				load_ppm(char *path, t_texture_settings *img)
 {
 	unsigned int	n;
 	FILE			*fd;
 	int				match;
-	
+
 	fd = fopen(path, "rb");
 	match = fscanf(fd, "P6\n%d %d\n255\n", &(img->width), &(img->height));
 	if (match != 2)
