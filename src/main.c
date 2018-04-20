@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/27 16:19:46 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/15 17:53:24 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/20 18:22:32 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int					main(int argc, char **argv)
 	if ((app.window = create_window()) == NULL
 		|| setup_opengl() != 0
 		|| (app.model = parse_model_file(argv[1])) == NULL
-		|| (app.texture = load_texture("./assets/kitten.jpg", GL_RGB)) ==
+		|| (app.texture = load_texture("./assets/kitten.ppm", GL_RGB)) ==
 		SC_TEXTURE_FAILED
 		|| (app.shader = compile_shader("./shaders/shader.vs",
 		"./shaders/shader.fs")) == SC_SHADER_FAILED)

@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/27 16:28:22 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/15 18:12:26 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/20 18:10:39 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,7 @@ typedef struct			s_texture_settings
 {
 	int					width;
 	int					height;
-	int					nr_channels;
-	stbi_uc				*data;
+	char				*data;
 }						t_texture_settings;
 
 typedef struct			s_app
